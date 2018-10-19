@@ -32,7 +32,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="array")
      */
-    private $roles = [];
+    private $roles = ['ROLE_USER'];
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="author", orphanRemoval=true)
