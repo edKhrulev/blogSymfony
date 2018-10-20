@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Comment;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,8 +14,7 @@ class CommentType extends AbstractType
     {
         $builder
             ->add('content')
-            ->add('author')
-            ->add('post')
+            ->add('save', SubmitType::class)
         ;
     }
 

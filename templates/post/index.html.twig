@@ -12,6 +12,11 @@
                 <th>Title</th>
                 <th>Content</th>
                 <th>CreatedAt</th>
+                <th>
+                    <a href="{{ path('post_index') }}">
+                    Author
+                    </a>
+                </th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -22,6 +27,13 @@
                 <td>{{ post.title }}</td>
                 <td>{{ post.content }}</td>
                 <td>{{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+
+                <td>
+                   <a href="{{ path('post_index', {'username': post.author.id}) }}">
+                    {{ post.author.username }}
+                    </a>
+                </td>
+
                 <td>
                     <a href="{{ path('post_show', {'id': post.id}) }}">show</a>
                 </td>

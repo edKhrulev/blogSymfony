@@ -1,7 +1,11 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: edkos
+ * Date: 10/20/2018
+ * Time: 11:41 PM
+ */
 namespace App\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**

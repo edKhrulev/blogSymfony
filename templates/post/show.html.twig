@@ -26,6 +26,23 @@
         </tbody>
     </table>
 
-    <a href="{{ path('post_index') }}">back to list</a>
+    <a href="{{ path('post_index') }}">back to list</a><br>
+
+    {% for comment in post.comments %}
+        <div class="card">
+            <div class="card-body">
+                {{ comment.content }}
+            </div>
+            <div class="card-footer">
+                <strong>
+                {{ comment.author.username }}
+                </strong>
+            </div>
+        </div>
+    {% endfor %}
+    <h2>Add comment</h2>
+    {{ form(form) }}
+
+
 
 {% endblock %}

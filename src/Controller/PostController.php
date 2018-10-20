@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Entity\Comment;
 use App\Form\PostType;
+use App\Form\CommentType;
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,9 +18,18 @@ class PostController extends AbstractController
     /**
      * @Route("/", name="post_index", methods="GET")
      */
-    public function index(PostRepository $postRepository): Response
+    public function index(Request $request, PostRepository $postRepository): Response
     {
-        return $this->render('post/index.html.twig', ['posts' => $postRepository->findAll()]);
+        $user_filter = $request->query->get('username');
+        if ($user_filter === null)
+        {
+            $posts = $postRepository->findAll();
+
+        } else {
+
+            $posts = $postRepository->findByAuthor($user_filter);
+        }
+        return $this->render('post/index.html.twig', ['posts' => $posts]);
     }
 
     /**
@@ -54,10 +65,23 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="post_show", methods="GET", requirements={"id": "\d+"})
+     * @Route("/{id}", name="post_show", methods="GET|POST", requirements={"id": "\d+"})
      */
-    public function show(Post $post): Response
+    public function show(Post $post, Request $request): Response
     {
-        return $this->render('post/show.html.twig', ['post' => $post]);
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $user = $this->getUser();
+            $comment->setAuthor($user)->setPost($post);
+            $em->persist($comment);
+            $em->flush();
+
+            return $this->redirectToRoute('post_show', ['id' => $post->getId()]);
+        }
+        return $this->render('post/show.html.twig', ['post' => $post, 'form' => $form->createView()]);
     }
 }
